@@ -1,4 +1,4 @@
-namespace TPChat
+namespace Chat
 {
     public class WeatherForecast
     {

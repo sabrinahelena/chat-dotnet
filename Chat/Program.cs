@@ -1,5 +1,5 @@
 
-namespace TPChat
+namespace Chat
 {
     public class Program
     {
