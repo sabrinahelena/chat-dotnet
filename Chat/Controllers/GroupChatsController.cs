@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Chat.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("rooms")]
 public class GroupChatsController : ControllerBase
 {
     private readonly ILogger<GroupChatsController> _logger;

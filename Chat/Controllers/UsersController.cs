@@ -1,6 +1,15 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace Chat.Controllers;
 
-public class UsersController
+[ApiController]
+[Route("users")]
+public class UsersController : ControllerBase
 {
-    
+    private readonly ILogger<UsersController> _logger;
+
+    public UsersController(ILogger<UsersController> logger)
+    {
+        _logger = logger;
+    }
 }
