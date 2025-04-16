@@ -1,15 +1,43 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat.Controllers;
 
 [ApiController]
 [Route("users")]
-public class UsersController : ControllerBase
+public class UsersController(IMediator mediator) : ControllerBase
 {
-    private readonly ILogger<UsersController> _logger;
-
-    public UsersController(ILogger<UsersController> logger)
+    /// <summary>
+    /// Register a new user.
+    /// </summary>
+    /// <returns>Returns the created user information.</returns>
+    [HttpPost]
+    public Task<ActionResult> RegisterUser()
     {
-        _logger = logger;
+        // Logic to register user
+        throw new NotImplementedException();
+    }
+    
+    /// <summary>
+    /// Authenticate a user.
+    /// </summary>
+    /// <returns>Returns authentication result (e.g., token or success status).</returns>
+    [HttpPost("login")]
+    public Task<ActionResult> AuthenticateUser()
+    {
+        // Logic to authenticate user
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Get information about a specific user.
+    /// </summary>
+    /// <param name="userId">The ID of the user.</param>
+    /// <returns>Returns user details.</returns>
+    [HttpGet("{userId:guid}")]
+    public Task<ActionResult> GetUserById(Guid userId)
+    {
+        // Logic to get user by ID
+        throw new NotImplementedException();
     }
 }
