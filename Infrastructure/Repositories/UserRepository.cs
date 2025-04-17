@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
+/// <summary>
+/// Repository for managing user entities in the database.
+/// This class implements the <see cref="IUserRepository"/> interface and provides methods to interact
+/// with user data stored in the database using Entity Framework.
+/// </summary>
 public class UserRepository(IChatDbContext context) : IUserRepository
 {
     public IUnitOfWork UnitOfWork => context;

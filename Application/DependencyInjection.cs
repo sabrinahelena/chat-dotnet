@@ -7,9 +7,7 @@ namespace Application;
 public static class DependencyInjection
 {
     public static IServiceCollection RegisterApplicationUseCases(this IServiceCollection services)
-    {
-        // services.AddScoped<IProductsConsumerService, ProductsConsumerService>();
-        
+    {        
         var assembly = Assembly.GetExecutingAssembly();
         
         services.AddAutoMapper(assembly);

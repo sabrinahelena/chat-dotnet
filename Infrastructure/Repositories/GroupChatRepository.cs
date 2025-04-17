@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
+/// <summary>
+/// Repository for managing group chat entities in the database.
+/// This class implements the <see cref="IGroupChatRepository"/> interface and provides methods to interact
+/// with group chat data stored in the database using Entity Framework.
+/// </summary>
 public class GroupChatRepository(IChatDbContext context) : IGroupChatRepository
 {
     public IUnitOfWork UnitOfWork => context;

@@ -6,14 +6,20 @@ using Application.UseCases.Users.Queries.GetUser;
 
 namespace Chat.Controllers;
 
+/// <summary>
+/// This class handles the management of user-related operations, including
+/// user registration, login, and retrieval of user information.
+/// </summary>
 [ApiController]
 [Route("users")]
 public class UsersController(IMediator mediator) : ControllerBase
 {
     /// <summary>
-    /// Register a new user.
+    /// Registers a new user by accepting their desired username and checking
+    /// if it's available. If available, creates a new user in the database.
     /// </summary>
-    /// <returns>Returns the created user information.</returns>
+    /// <param name="command">The user data containing the username.</param>
+    /// <returns>A response indicating whether the registration was successful.</returns>
     [HttpPost]
     public async Task<ActionResult<RegisterUserResponse>> RegisterUser([FromBody] RegisterUserCommand command, CancellationToken cancellationToken)
     {
@@ -21,9 +27,10 @@ public class UsersController(IMediator mediator) : ControllerBase
     }
 
     /// <summary>
-    /// Authenticate a user.
+    /// Logs in a user by validating their username and returning an authentication token.
     /// </summary>
-    /// <returns>Returns authentication result (e.g., token or success status).</returns>
+    /// <param name="command">The login request containing the user's credentials.</param>
+    /// <returns>A confirmation for the logged-in user.</returns>
     [HttpPost("login")]
     public async Task<ActionResult<AuthenticateUserResponse>> AuthenticateUser([FromBody] AuthenticateUserCommand command, CancellationToken cancellationToken)
     {

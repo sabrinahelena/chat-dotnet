@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
+/// <summary>
+/// Repository for managing message entities in the database.
+/// This class implements the <see cref="IMessageRepository"/> interface and provides methods to interact
+/// with message data stored in the database using Entity Framework.
+/// </summary>
 public class MessageRepository(IChatDbContext context) : IMessageRepository
 {
     public IUnitOfWork UnitOfWork => context;

@@ -1,3 +1,6 @@
+using Application.UseCases.GroupChats.Dtos;
+using Application.UseCases.Messages.Commands.SendMessageToGroupChat;
+using Application.UseCases.Messages.Commands.SendMessageToUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +16,15 @@ public class MessagesController(IMediator mediator) : ControllerBase
     /// <param name="receiverId">The ID of the user receiving the message.</param>
     /// <returns>Returns the result of sending the direct message.</returns>
     [HttpPost("direct/{receiverId:guid}")]
-    public Task<ActionResult> SendDirectMessage(Guid receiverId)
+    public async Task<ActionResult<SendMessageToUserResponse>> SendDirectMessage(Guid receiverId,
+        [FromBody] SendMessageToUserCommand command, CancellationToken cancellationToken)
     {
-        // Logic to send direct message
-        throw new NotImplementedException();
+        var cmd = new SendMessageToUserCommand(command.SenderId, receiverId, command.Content);
+        var result = await mediator.Send(cmd, cancellationToken);
+
+        if (!result.Success)
+            return BadRequest(new { Message = "Não foi possível enviar a mensagem." });
+
+        return Ok(result);
     }
 }
