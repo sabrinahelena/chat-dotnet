@@ -1,6 +1,8 @@
 using Application.UseCases.Users.Commands.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Application.UseCases.Users.Commands.AuthenticateUser;
+using Application.UseCases.Users.Queries.GetUser;
 
 namespace Chat.Controllers;
 
@@ -17,16 +19,20 @@ public class UsersController(IMediator mediator) : ControllerBase
     {
         return await mediator.Send(command, cancellationToken);
     }
-    
+
     /// <summary>
     /// Authenticate a user.
     /// </summary>
     /// <returns>Returns authentication result (e.g., token or success status).</returns>
     [HttpPost("login")]
-    public Task<ActionResult> AuthenticateUser()
+    public async Task<ActionResult<AuthenticateUserResponse>> AuthenticateUser([FromBody] AuthenticateUserCommand command, CancellationToken cancellationToken)
     {
-        // Logic to authenticate user
-        throw new NotImplementedException();
+        var result = await mediator.Send(command, cancellationToken);
+
+        if (!result.Success)
+            return Unauthorized(new { Message = "Login ou senha inválidos." });
+
+        return Ok(result);
     }
 
     /// <summary>
@@ -35,9 +41,12 @@ public class UsersController(IMediator mediator) : ControllerBase
     /// <param name="userId">The ID of the user.</param>
     /// <returns>Returns user details.</returns>
     [HttpGet("{userId:guid}")]
-    public Task<ActionResult> GetUserById(Guid userId)
+    public async Task<ActionResult<GetUserResponse>> GetUserById(Guid userId, CancellationToken cancellationToken)
     {
-        // Logic to get user by ID
-        throw new NotImplementedException();
+        var response = await mediator.Send(
+            new GetUserQuery(userId),
+            cancellationToken);
+
+        return Ok(response);
     }
 }
