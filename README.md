@@ -7,12 +7,12 @@ Uma API RESTful desenvolvida em ASP.NET Core para gerenciamento de **usuários**
 
 ## 🚀 Funcionalidades
 
-- 👤 Cadastro e autenticação de usuários
-- 📩 Envio de mensagens diretas entre usuários
-- 👥 Criação de grupos de chat com múltiplos participantes
-- 🗨️ Envio de mensagens em grupo
-- 🧑‍🤝‍🧑 Entrada e saída de usuários em grupos
-- 📜 Histórico de mensagens por grupo ou usuário
+- 👤 Cadastro e verificação de login de usuários  
+- 👥 Criação, listagem, entrada, saída e remoção de usuários em salas de chat  
+- 💬 Envio de mensagens diretas entre usuários  
+- 🗨️ Envio e recuperação de mensagens em salas de chat  
+- 📜 Histórico de mensagens por sala  
+
 
 ---
 
@@ -45,27 +45,32 @@ A API estará disponível em:
 ## 📮 Endpoints principais
 
 ### 👤 Usuários
-| Método | Rota            | Descrição                      |
-|--------|------------------|-------------------------------|
-| POST   | `/users`         | Criar novo usuário            |
-| POST   | `/users/login`   | Autenticar usuário            |
+| Método | Rota             | Descrição                       |
+|--------|------------------|---------------------------------|
+| POST   | `/users`         | Criar novo usuário              |
+| POST   | `/users/login`   | Autenticar usuário              |
+| GET    | `/users/{userId}`| Obter informações de um usuário |        |
 
 ### 💬 Mensagens Diretas
-| Método | Rota                            | Descrição                           |
-|--------|----------------------------------|--------------------------------------|
-| POST   | `/messages/direct/{userId}`     | Enviar mensagem direta              |
-| GET    | `/messages/direct/{userId}`     | Listar mensagens trocadas com usuário |
+| Método | Rota                            | Descrição                              |
+|--------|---------------------------------|----------------------------------------|
+| POST   | `/messages/direct/{receiverId}` | Enviar mensagem direta a outro usuário |
 
-### 🧑‍🤝‍🧑 Grupos de Chat
-| Método | Rota                            | Descrição                             |
-|--------|----------------------------------|----------------------------------------|
-| POST   | `/rooms`                         | Criar grupo de chat                   |
-| POST   | `/rooms/{id}/enter`              | Entrar em grupo                       |
-| POST   | `/rooms/{id}/leave`              | Sair de grupo                         |
-| POST   | `/rooms/{id}/messages`           | Enviar mensagem no grupo              |
-| GET    | `/rooms/{id}/messages`           | Buscar mensagens do grupo             |
+### 💬 Mensagens em Grupo
+| Método | Rota                            | Descrição                                       |
+|--------|---------------------------------|-------------------------------------------------|
+| POST   | `/rooms/{roomId}/messages`      | Enviar mensagem em uma sala de chat             |
+| GET    | `/rooms/{roomId}/messages`      | Recuperar histórico de mensagens de uma sala    |
+
+### 🧑‍🤝‍🧑 Salas de Chat
+| Método | Rota                            | Descrição                              |
+|--------|----------------------------------|---------------------------------------|
+| POST   | `/rooms`                         | Criar uma nova sala de chat           |
+| DELETE | `/rooms/{roomId}`                | Remover uma sala de chat              |
+| POST   | `/rooms/{roomId}/enter`          | Entrar em uma sala                    |
+| POST   | `/rooms/{roomId}/leave`          | Sair de uma sala                      |
 | GET    | `/rooms/{id}/participants`       | Listar participantes de um grupo      |
-| GET    | `/rooms`                         | Listar grupos disponíveis             |
+| GET    | `/rooms`                         | Listar todas as salas ativas          |
 
 ---
 
