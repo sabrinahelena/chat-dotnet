@@ -21,4 +21,8 @@
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EditorConfigFiles Remove="C:\Users\sabrinaf\Desktop\TPChat\Application\UseCases\Messages\Queries\ReceiveMessagesFromGroupChat\.editorconfig" />
+    </ItemGroup>
+
 </Project>

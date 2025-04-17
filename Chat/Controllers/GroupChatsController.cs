@@ -1,3 +1,13 @@
+using Application.UseCases.GroupChats.Commands.CreateGroupChat;
+using Application.UseCases.GroupChats.Commands.DeleteGroupChat;
+using Application.UseCases.GroupChats.Commands.JoinGroupChat;
+using Application.UseCases.GroupChats.Commands.LeaveGroupChat;
+using Application.UseCases.GroupChats.Commands.RemoveUserFromGroupChat;
+using Application.UseCases.GroupChats.Dtos;
+using Application.UseCases.GroupChats.Queries.GetGroupChats;
+using Application.UseCases.Messages.Commands.SendMessageToGroupChat;
+using Application.UseCases.Messages.Queries.DTOs;
+using Application.UseCases.Messages.Queries.ReceiveMessagesFromGroupChat;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +22,9 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns>Returns the details of the newly created room.</returns>
     [HttpPost]
-    public async Task<ActionResult> CreateRoom()
-    {
-        // Logic to create room
-        return Ok();
-    }
+    public async Task<ActionResult<CreateGroupChatResponse>> CreateRoom(CancellationToken cancellationToken)
+        => Ok(await mediator.Send(new CreateGroupChatCommand(), cancellationToken));
+
 
     /// <summary>
     /// Delete a specific chat room by ID.
@@ -24,11 +32,15 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// <param name="roomId">The ID of the room to delete.</param>
     /// <returns>No content if the room is deleted.</returns>
     [HttpDelete("{roomId:guid}")]
-    public async Task<ActionResult> DeleteRoom(Guid roomId)
+    public async Task<ActionResult> DeleteRoom(Guid roomId, CancellationToken cancellationToken)
     {
-        // Logic to delete room
-        return NoContent();
+        var res = await mediator.Send(new DeleteGroupChatCommand(roomId), cancellationToken);
+        return res.Success ? NoContent() : NotFound();
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<GroupChatDto>>> ListRooms(CancellationToken ct)
+        => Ok(await mediator.Send(new ListGroupChatsQuery(), ct));
 
     /// <summary>
     /// Join a chat room by room ID.
@@ -36,10 +48,13 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// <param name="roomId">The ID of the room to join.</param>
     /// <returns>Returns confirmation of join action.</returns>
     [HttpPost("{roomId:guid}/enter")]
-    public async Task<ActionResult> JoinRoom(Guid roomId)
+    public async Task<IActionResult> JoinRoom(
+        Guid roomId,
+        [FromBody] UserInRoomDto dto,
+        CancellationToken ct)
     {
-        // Logic to join room
-        return Ok();
+        var res = await mediator.Send(new JoinGroupChatCommand(roomId, dto.UserId), ct);
+        return res.Success ? Ok() : BadRequest();
     }
 
     /// <summary>
@@ -48,10 +63,13 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// <param name="roomId">The ID of the room to leave.</param>
     /// <returns>Returns confirmation of leave action.</returns>
     [HttpPost("{roomId:guid}/leave")]
-    public async Task<ActionResult> LeaveRoom(Guid roomId)
+    public async Task<IActionResult> LeaveRoom(
+        Guid roomId,
+        [FromBody] UserInRoomDto dto,
+        CancellationToken ct)
     {
-        // Logic to leave room
-        return Ok();
+        var res = await mediator.Send(new LeaveGroupChatCommand(roomId, dto.UserId), ct);
+        return res.Success ? Ok() : BadRequest();
     }
 
     /// <summary>
@@ -61,10 +79,12 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// <param name="userId">The ID of the user to remove.</param>
     /// <returns>No content if user is removed successfully.</returns>
     [HttpDelete("{roomId:guid}/users/{userId:guid}")]
-    public async Task<ActionResult> RemoveUserFromRoom(Guid roomId, Guid userId)
+    public async Task<IActionResult> RemoveUserFromRoom(
+        Guid roomId, Guid userId, CancellationToken ct)
     {
-        // Logic to remove user from room
-        return NoContent();
+        var res = await mediator.Send(
+            new RemoveUserFromGroupChatCommand(roomId, userId), ct);
+        return res.Success ? NoContent() : BadRequest();
     }
 
     /// <summary>
@@ -73,10 +93,18 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// <param name="roomId">The ID of the chat room.</param>
     /// <returns>Returns the result of sending the message to the room.</returns>
     [HttpPost("{roomId:guid}/messages")]
-    public Task<ActionResult> SendMessageToRoom(Guid roomId)
+    public async Task<ActionResult<SendMessageToGroupChatResponse>> SendMessageToRoom(
+        Guid roomId,
+        [FromBody] SendMessageDto dto,
+        CancellationToken cancellationToken)
     {
-        // Logic to send message to room
-        throw new NotImplementedException();
+        var cmd = new SendMessageToGroupChatCommand(dto.SenderId, roomId, dto.Content);
+        var result = await mediator.Send(cmd, cancellationToken);
+
+        if (!result.Success)
+            return BadRequest(new { Message = "Não foi possível enviar a mensagem." });
+
+        return Ok(result);
     }
 
     /// <summary>
@@ -85,9 +113,16 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// <param name="roomId">The ID of the chat room.</param>
     /// <returns>Returns the list of messages from the room.</returns>
     [HttpGet("{roomId:guid}/messages")]
-    public Task<ActionResult> GetMessagesFromRoom(Guid roomId)
+    public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessagesFromRoom(
+        Guid roomId,
+        CancellationToken cancellationToken)
     {
-        // Logic to retrieve message history from room
-        throw new NotImplementedException();
+        var query = new ReceiveMessagesFromGroupChatQuery(roomId);
+        var messages = await mediator.Send(query, cancellationToken);
+        return Ok(messages);
     }
+
+    public record UserInRoomDto(Guid UserId);
+    public record SendMessageDto(Guid SenderId, string Content);
+
 }

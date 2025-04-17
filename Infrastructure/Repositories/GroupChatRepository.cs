@@ -2,15 +2,28 @@ using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Domain.SeedWork;
 using Infrastructure.Persistence.EntityFramework.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public class GroupChatRepository(IChatDbContext context) : IGroupChatRepository
 {
     public IUnitOfWork UnitOfWork => context;
-    
-    public async Task AddAsync(UserEntity entity, CancellationToken cancellationToken)
-    {
-        await context.Users.AddAsync(entity, cancellationToken);
-    }
+
+    public async Task AddAsync(GroupChatEntity entity, CancellationToken cancellationToken)
+    => await context.GroupChats.AddAsync(entity, cancellationToken);
+
+    public void Remove(GroupChatEntity entity)
+        => context.GroupChats.Remove(entity);
+
+    public async Task<GroupChatEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        => await context.GroupChats
+            .Include(gc => gc.Members)
+            .Include(gc => gc.Messages)
+            .FirstOrDefaultAsync(gc => gc.Id == id, cancellationToken);
+
+    public async Task<IEnumerable<GroupChatEntity>> GetAllAsync(CancellationToken cancellationToken)
+        => await context.GroupChats
+            .Include(gc => gc.Members)
+            .ToListAsync(cancellationToken);
 }
