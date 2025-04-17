@@ -11,6 +11,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{315663E8-33C4-409E-9346-E2099DB129D2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "resources", "resources", "{BBEF55C9-4F45-473E-A0DE-635786F84578}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yaml = docker-compose.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{111C6EAE-DBEB-4D8E-A3C8-852A65B61167}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +43,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{315663E8-33C4-409E-9346-E2099DB129D2} = {111C6EAE-DBEB-4D8E-A3C8-852A65B61167}
+		{870DD663-D069-49C0-AA55-B1BB4EBB2137} = {111C6EAE-DBEB-4D8E-A3C8-852A65B61167}
+		{27AF394A-08CB-41B8-874C-CC72AFD186BF} = {111C6EAE-DBEB-4D8E-A3C8-852A65B61167}
+		{A9726FD5-65C7-4B4D-AC14-140879833F0D} = {111C6EAE-DBEB-4D8E-A3C8-852A65B61167}
 	EndGlobalSection
 EndGlobal

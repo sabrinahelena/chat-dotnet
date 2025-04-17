@@ -2,6 +2,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Persistence.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace Chat;
 
@@ -13,11 +14,36 @@ public class Startup(IConfiguration configuration)
     {
         services.RegisterApplicationUseCases();
         services.RegisterExternalDependencies(Configuration);
+
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "Chat API",
+                Version = "v1"
+            });
+        });
+
+        services.AddControllers();
     }
 
     public void Configure(IApplicationBuilder app, IConfiguration configuration)
     {
         ExecuteMigration();
+
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Chat API v1");
+            options.RoutePrefix = string.Empty;
+        });
+
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
     }
 
     private void ExecuteMigration()
