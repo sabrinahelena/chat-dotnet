@@ -3,6 +3,7 @@ using Infrastructure;
 using Infrastructure.Persistence.EntityFramework.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace Chat;
 
@@ -23,6 +24,11 @@ public class Startup(IConfiguration configuration)
                 Title = "Chat API",
                 Version = "v1"
             });
+
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
         });
 
         services.AddControllers();
@@ -36,7 +42,6 @@ public class Startup(IConfiguration configuration)
         app.UseSwaggerUI(options =>
         {
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "Chat API v1");
-            options.RoutePrefix = string.Empty;
         });
 
         app.UseRouting();

@@ -10,7 +10,7 @@ public class GetUserHandler(IUserRepository userRepository) : IRequestHandler<Ge
         CancellationToken cancellationToken)
     {
         var user = await userRepository.GetByIdAsync(query.UserId, cancellationToken)
-            ?? throw new KeyNotFoundException("User was not found.");
+            ?? throw new KeyNotFoundException("Usuário não foi encontrado.");
 
         return new GetUserResponse(user.Id.GetValueOrDefault(), user.Name, user.Login);
     }

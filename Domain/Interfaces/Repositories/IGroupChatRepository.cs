@@ -9,4 +9,5 @@ public interface IGroupChatRepository: IRepository
     void Remove(GroupChatEntity groupChat);
     Task<GroupChatEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
     Task<IEnumerable<GroupChatEntity>> GetAllAsync(CancellationToken cancellationToken);
+    void Update(GroupChatEntity groupChatEntity);
 }

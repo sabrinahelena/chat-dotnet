@@ -18,6 +18,7 @@ public class GroupChatRepository(IChatDbContext context) : IGroupChatRepository
 
     public async Task<GroupChatEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         => await context.GroupChats
+            .AsNoTracking()
             .Include(gc => gc.Members)
             .Include(gc => gc.Messages)
             .FirstOrDefaultAsync(gc => gc.Id == id, cancellationToken);
@@ -26,4 +27,7 @@ public class GroupChatRepository(IChatDbContext context) : IGroupChatRepository
         => await context.GroupChats
             .Include(gc => gc.Members)
             .ToListAsync(cancellationToken);
+
+    public void Update(GroupChatEntity groupChatEntity)
+        => context.GroupChats.Update(groupChatEntity);
 }

@@ -18,6 +18,8 @@ public class JoinGroupChatHandler(IGroupChatRepository groupChatRepository,
         if (room.Members!.Any(m => m.Id == cmd.UserId) == false)
             room.Members!.Add(user);
 
+        groupChatRepository.Update(room);
+
         await groupChatRepository.UnitOfWork.CommitAsync(ct);
         return new JoinGroupChatResponse(true);
     }

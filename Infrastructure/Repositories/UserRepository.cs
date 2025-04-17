@@ -18,7 +18,6 @@ public class UserRepository(IChatDbContext context) : IUserRepository
     public async Task<UserEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await context.Users
-            .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
     }
 
