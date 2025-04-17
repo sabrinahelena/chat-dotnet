@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.EntityFramework.Context;
 
-public class ChatDbContext: DbContext
+public class ChatDbContext: DbContext, IChatDbContext
 {
-    public IDbConnection Connection => base.Database.GetDbConnection();
-    
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<MessageEntity> Messages { get; set; }
     public DbSet<GroupChatEntity> GroupChats { get; set; }
+    public IDbConnection Connection => base.Database.GetDbConnection();
 
     public ChatDbContext(DbContextOptions<ChatDbContext> options)
         : base(options)
