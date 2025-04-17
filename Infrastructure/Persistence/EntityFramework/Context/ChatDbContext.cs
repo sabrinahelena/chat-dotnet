@@ -32,4 +32,9 @@ public class ChatDbContext: DbContext, IChatDbContext
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
+    
+    public async Task<bool> CommitAsync(CancellationToken cancellationToken = default)
+    {
+        return await base.SaveChangesAsync(cancellationToken) > default(int);
+    }
 }

@@ -1,4 +1,6 @@
+using Domain.Interfaces.Repositories;
 using Infrastructure.Persistence.EntityFramework.Context;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +20,8 @@ public static class DependencyInjection
 
     private static void ConfigureRepositories(IServiceCollection services)
     {
-        // services.AddScoped<ISagaRepository, SagaRepository>();
-        // services.AddTransient<IAgreementsAccessControlRepository, AgreementsAccessControlRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IGroupChatRepository, GroupChatRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
     }
 }

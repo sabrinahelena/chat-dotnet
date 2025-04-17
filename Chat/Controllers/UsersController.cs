@@ -1,3 +1,4 @@
+using Application.UseCases.Users.Commands.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +13,9 @@ public class UsersController(IMediator mediator) : ControllerBase
     /// </summary>
     /// <returns>Returns the created user information.</returns>
     [HttpPost]
-    public Task<ActionResult> RegisterUser()
+    public async Task<ActionResult<RegisterUserResponse>> RegisterUser([FromBody] RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        // Logic to register user
-        throw new NotImplementedException();
+        return await mediator.Send(command, cancellationToken);
     }
     
     /// <summary>
