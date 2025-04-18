@@ -41,10 +41,9 @@ public class GroupChatsController(IMediator mediator) : ControllerBase
     /// <summary>
     /// Endpoint to retrieve a list of all group chat rooms.
     /// This method processes a GET request to retrieve all the available group chat rooms.
-    /// It triggers the <see cref="ListGroupChatsQuery"/> to fetch the data and return a list of group chat details.
     /// </summary>
     /// <param name="ct">The cancellation token to monitor for request cancellation.</param>
-    /// <returns>An <see cref="IEnumerable{GroupChatDto}"/> containing a list of group chat rooms as <see cref="GroupChatDto"/> objects.</returns>
+    /// <returns>A list of group chat rooms as <see cref="GroupChatDto"/> objects.</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GroupChatDto>>> ListRooms(CancellationToken ct)
         => Ok(await mediator.Send(new ListGroupChatsQuery(), ct));
